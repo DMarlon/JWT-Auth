@@ -30,3 +30,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### personal config ###
+/bin/
+/src/main/resources/application.properties
+/gradle/wrapper/gradle-wrapper.jar
+/gradlew
+/gradlew.bat
