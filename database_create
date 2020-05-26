@@ -1,0 +1,24 @@
+CREATE DOMAIN status AS smallint NOT NULL;
+COMMENT ON DOMAIN status IS '1-enable 2-disable';
+
+CREATE TABLE sysusers
+(
+    use_id serial NOT NULL DEFAULT,
+    use_name character varying NOT NULL,
+    use_password character varying NOT NULL,
+    use_status status NOT NULL,
+    CONSTRAINT sysuser_pkey PRIMARY KEY (use_id)
+)
+
+CREATE TABLE syssessions
+(
+    ses_id serial NOT NULL,
+    ses_user_id integer NOT NULL,
+    ses_token character varying NOT NULL,
+    ses_devicename character varying,
+    ses_remoteaddress character varying,
+    ses_lastaccess date[] NOT NULL,
+    PRIMARY KEY (ses_id),
+    CONSTRAINT fk_syssessions_sysusers_use_id FOREIGN KEY (ses_user_id) REFERENCES sysuser (use_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE NOT VALID
+);
+
