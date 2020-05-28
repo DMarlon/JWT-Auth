@@ -7,7 +7,7 @@ CREATE TABLE sysusers
     use_name character varying NOT NULL,
     use_password character varying NOT NULL,
     use_status status NOT NULL,
-    CONSTRAINT sysuser_pkey PRIMARY KEY (use_id)
+    PRIMARY KEY (ses_id),
 )
 
 CREATE TABLE syssessions
