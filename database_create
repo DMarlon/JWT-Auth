@@ -1,13 +1,33 @@
 CREATE DOMAIN status AS smallint NOT NULL;
 COMMENT ON DOMAIN status IS '1-enable 2-disable';
 
+CREATE TABLE sysauthorizations
+(
+    aut_id serial NOT NULL,
+    aut_description character varying NOT NULL,
+    aut_status status NOT NULL,
+    PRIMARY KEY (aut_id),
+    CONSTRAINT aut_description_uni UNIQUE (aut_description)
+);
+
+CREATE TABLE sysprofiles
+(
+    pro_id serial NOT NULL,
+    pro_description character varying NOT NULL,
+    pro_status status NOT NULL,
+    PRIMARY KEY (pro_id),
+    CONSTRAINT pro_description_uni UNIQUE (pro_description)
+);
+
 CREATE TABLE sysusers
 (
-    use_id serial NOT NULL DEFAULT,
+    use_id serial NOT NULL,
     use_name character varying NOT NULL,
     use_password character varying NOT NULL,
-    use_status status NOT NULL,
-    PRIMARY KEY (ses_id),
+    use_profile_id integer NOT NULL,
+    use_status status,
+    CONSTRAINT sysuser_pkey PRIMARY KEY (use_id),
+    CONSTRAINT fk_sysusers_sysprofiles_pro_id FOREIGN KEY (use_profile_id) REFERENCES sysprofiles (pro_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION NOT VALID
 )
 
 CREATE TABLE syssessions
@@ -17,8 +37,19 @@ CREATE TABLE syssessions
     ses_token character varying NOT NULL,
     ses_devicename character varying,
     ses_remoteaddress character varying,
-    ses_lastaccess date[] NOT NULL,
+    ses_lastaccess timestamp without time zone NOT NULL,
     PRIMARY KEY (ses_id),
-    CONSTRAINT fk_syssessions_sysusers_use_id FOREIGN KEY (ses_user_id) REFERENCES sysuser (use_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE NOT VALID
+    CONSTRAINT fk_syssessions_sysusers_use_id FOREIGN KEY (ses_user_id) REFERENCES sysusers (use_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE NOT VALID
 );
+
+CREATE TABLE syspermissions
+(
+    per_id serial NOT NULL,
+    per_profile_id integer NOT NULL,
+    per_authorization_id integer NOT NULL,
+    PRIMARY KEY (per_id),
+    CONSTRAINT fk_syspermission_sysprofile_pro_id FOREIGN KEY (per_profile_id) REFERENCES sysprofiles (pro_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE NOT VALID,
+    CONSTRAINT fk_syspermissions_sysauthorizations_aut_id FOREIGN KEY (per_authorization_id) REFERENCES sysauthorizations (aut_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE NOT VALID
+);
+
 

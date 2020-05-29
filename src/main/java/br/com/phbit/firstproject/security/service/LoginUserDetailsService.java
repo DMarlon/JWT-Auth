@@ -1,4 +1,4 @@
-package br.com.phbit.firstproject.service;
+package br.com.phbit.firstproject.security.service;
 
 import static java.util.Collections.emptyList;
 

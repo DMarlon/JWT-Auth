@@ -1,4 +1,4 @@
-package br.com.phbit.firstproject.filter.login;
+package br.com.phbit.firstproject.security.filter;
 
 import java.io.IOException;
 import java.util.ArrayList;
