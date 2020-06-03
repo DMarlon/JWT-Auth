@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.phbit.firstproject.repository.UserRepository;
 
-@Service
+@Service(value = "security")
 public class SecurityService {
 
 	private UserRepository userRepository;
